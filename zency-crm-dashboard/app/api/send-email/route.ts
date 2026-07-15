@@ -1,6 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
+
+console.log(
+  "GOOGLE KEY:",
+  process.env.GOOGLE_API_KEY?.slice(0,10)
+);
 const genAI = new GoogleGenerativeAI(
   process.env.GOOGLE_API_KEY!
 );
@@ -157,11 +162,78 @@ ${email.body.replace(/\n/g, "<br>")}
     console.log("Updating Lead...");
 
     await supabaseAdmin
-      .from("leads")
-      .update({
-        status: "CONTACTED",
-      })
-      .eq("id", lead.id);
+  .from("leads")
+  .update({
+    status: "CONTACTED",
+
+    last_email_subject: email.subject,
+
+    last_email_body: email.body,
+
+    last_email_sent_at: new Date().toISOString(),
+
+    brevo_message_id:
+      brevoData.messageId ?? null,
+  })
+  .eq("id", lead.id);
+
+      console.log("Saving Email History...");
+
+const { error: emailHistoryError } =
+  await supabaseAdmin
+    .from("emails_sent")
+    .insert({
+      lead_id: lead.id,
+
+      subject: email.subject,
+
+      body: email.body,
+
+      recipient: testRecipient,
+
+      status: "SENT",
+
+      message_id:
+        brevoData.messageId ??
+        null,
+    });
+
+    console.log("Saving Activity...");
+
+    const { error: activityError } =
+      await supabaseAdmin
+        .from("activities")
+        .insert({
+          lead_id: lead.id,
+
+          activity_type: "EMAIL",
+
+          title: "AI Email Sent",
+
+          description: `Subject: ${email.subject}`,
+        });
+
+if (activityError) {
+  console.error(
+    "ACTIVITY ERROR:",
+    activityError
+  );
+} else {
+  console.log(
+    "Activity saved."
+  );
+}
+
+if (emailHistoryError) {
+  console.error(
+    "EMAIL HISTORY ERROR:",
+    emailHistoryError
+  );
+} else {
+  console.log(
+    "Email history saved."
+  );
+}
 
     return Response.json({
       success: true,

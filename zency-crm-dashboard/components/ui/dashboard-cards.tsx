@@ -1,94 +1,88 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+interface Props {
+  stats: {
+    total: number;
+    hot: number;
+    clients: number;
+    averageScore: number;
+    emails: number;
+    conversion: number;
+  };
+}
 
-export default function DashboardCards() {
-  const [stats, setStats] = useState({
-    total: 0,
-    hot: 0,
-    warm: 0,
-    cold: 0,
-  });
-
-  useEffect(() => {
-    loadStats();
-  }, []);
-
-  async function loadStats() {
-    const { data } = await supabase
-      .from("leads")
-      .select("*");
-
-    if (!data) return;
-
-    setStats({
-      total: data.length,
-
-      hot: data.filter((lead) =>
-        lead.lead_grade?.includes("HOT")
-      ).length,
-
-      warm: data.filter((lead) =>
-        lead.lead_grade?.includes("WARM")
-      ).length,
-
-      cold: data.filter((lead) =>
-        lead.lead_grade?.includes("COLD")
-      ).length,
-    });
-  }
+export default function DashboardCards({
+  stats,
+}: Props) {
 
   const cards = [
     {
-      title: "Total Leads",
+      title: "📊 Total Leads",
       value: stats.total,
       color: "from-blue-500/20",
     },
     {
-      title: "Hot Leads",
+      title: "🔥 HOT Leads",
       value: stats.hot,
       color: "from-green-500/20",
     },
     {
-      title: "Warm Leads",
-      value: stats.warm,
-      color: "from-yellow-500/20",
+      title: "💰 Clients",
+      value: stats.clients,
+      color: "from-purple-500/20",
     },
     {
-      title: "Cold Leads",
-      value: stats.cold,
+      title: "📧 Emails Sent",
+      value: stats.emails,
+      color: "from-orange-500/20",
+    },
+    {
+      title: "⭐ Avg Score",
+      value: stats.averageScore,
       color: "from-cyan-500/20",
+    },
+    {
+      title: "🎯 Conversion",
+      value: `${stats.conversion}%`,
+      color: "from-pink-500/20",
     },
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
       {cards.map((card) => (
+
         <div
           key={card.title}
           className={`
-            rounded-3xl
-            border
-            border-zinc-800
-            bg-gradient-to-br
-            ${card.color}
-            to-transparent
-            backdrop-blur-xl
-            p-6
-            hover:scale-[1.02]
-            transition
+          rounded-3xl
+          border
+          border-zinc-800
+          bg-gradient-to-br
+          ${card.color}
+          to-transparent
+          backdrop-blur-xl
+          p-6
+          transition-all
+          duration-300
+          hover:scale-[1.03]
+          hover:border-blue-500/40
           `}
         >
+
           <p className="text-zinc-400 text-sm">
             {card.title}
           </p>
 
-          <h2 className="text-5xl font-bold mt-4">
+          <h2 className="text-5xl font-bold mt-5">
             {card.value}
           </h2>
+
         </div>
+
       ))}
+
     </div>
   );
 }
