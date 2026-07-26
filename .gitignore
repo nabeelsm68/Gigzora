@@ -4,6 +4,9 @@ __pycache__/
 .venv/
 venv/
 
+# Data
+*.csv
+
 # Node
 node_modules/
 .next/
@@ -12,6 +15,8 @@ node_modules/
 .env
 .env.local
 *.env.local
+*.env
+.env.*
 
 # VS Code
 .vscode/

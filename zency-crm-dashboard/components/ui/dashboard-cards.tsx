@@ -1,5 +1,14 @@
 "use client";
 
+import { 
+  Users, 
+  Flame, 
+  Briefcase, 
+  Mail, 
+  Target, 
+  TrendingUp 
+} from "lucide-react";
+
 interface Props {
   stats: {
     total: number;
@@ -11,78 +20,67 @@ interface Props {
   };
 }
 
-export default function DashboardCards({
-  stats,
-}: Props) {
-
+export default function DashboardCards({ stats }: Props) {
   const cards = [
     {
-      title: "📊 Total Leads",
+      title: "Total Leads",
       value: stats.total,
-      color: "from-blue-500/20",
+      icon: <Users className="w-4 h-4 text-zinc-400" />,
     },
     {
-      title: "🔥 HOT Leads",
+      title: "HOT Leads",
       value: stats.hot,
-      color: "from-green-500/20",
+      icon: <Flame className="w-4 h-4 text-emerald-400" />,
     },
     {
-      title: "💰 Clients",
+      title: "Clients Won",
       value: stats.clients,
-      color: "from-purple-500/20",
+      icon: <Briefcase className="w-4 h-4 text-blue-400" />,
     },
     {
-      title: "📧 Emails Sent",
+      title: "Emails Sent",
       value: stats.emails,
-      color: "from-orange-500/20",
+      icon: <Mail className="w-4 h-4 text-zinc-400" />,
     },
     {
-      title: "⭐ Avg Score",
+      title: "Average Score",
       value: stats.averageScore,
-      color: "from-cyan-500/20",
+      icon: <Target className="w-4 h-4 text-zinc-400" />,
     },
     {
-      title: "🎯 Conversion",
+      title: "Conversion Rate",
       value: `${stats.conversion}%`,
-      color: "from-pink-500/20",
+      icon: <TrendingUp className="w-4 h-4 text-blue-400" />,
     },
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
+    <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
       {cards.map((card) => (
-
         <div
           key={card.title}
-          className={`
-          rounded-3xl
-          border
-          border-zinc-800
-          bg-gradient-to-br
-          ${card.color}
-          to-transparent
-          backdrop-blur-xl
-          p-6
-          transition-all
-          duration-300
-          hover:scale-[1.03]
-          hover:border-blue-500/40
-          `}
+          className="
+            flex flex-col
+            rounded-lg
+            border border-[#262626]
+            bg-[#161616]
+            p-4
+            transition-colors
+            hover:bg-[#1C1C1C]
+          "
         >
-
-          <p className="text-zinc-400 text-sm">
-            {card.title}
-          </p>
-
-          <h2 className="text-5xl font-bold mt-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-zinc-400 text-xs font-medium uppercase tracking-wider font-mono">
+              {card.title}
+            </p>
+            {card.icon}
+          </div>
+          
+          <h2 className="text-2xl font-semibold text-white tracking-tight mt-auto">
             {card.value}
           </h2>
-
         </div>
-
       ))}
-
     </div>
   );
 }
