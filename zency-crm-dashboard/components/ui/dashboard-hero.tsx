@@ -1,26 +1,26 @@
-export default function DashboardHero() {
-  return (
-    <div
-      className="
-      rounded-3xl
-      border
-      border-zinc-800
-      bg-gradient-to-r
-      from-blue-500/20
-      via-purple-500/10
-      to-transparent
-      p-8
-      mb-8
-      "
-    >
-      <h1 className="text-5xl font-bold">
-        Welcome back, Nabeel 👋
-      </h1>
+"use client";
 
-      <p className="text-zinc-400 mt-4 text-lg">
-        You generated 247 leads this week and
-        converted 8 into active opportunities.
-      </p>
+import { useMemo } from "react";
+
+export default function DashboardHero() {
+  const today = useMemo(() => {
+    return new Intl.DateTimeFormat('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric' 
+    }).format(new Date());
+  }, []);
+
+  return (
+    <div className="flex flex-col justify-end min-h-[140px] mb-8 pb-6 border-b border-[#262626]">
+      <div className="space-y-1">
+        <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
+          {today}
+        </p>
+        <h1 className="text-4xl font-semibold text-white tracking-tight">
+          Overview
+        </h1>
+      </div>
     </div>
   );
 }

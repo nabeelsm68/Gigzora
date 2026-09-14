@@ -52,7 +52,7 @@ export default function Sidebar() {
         </Link>
 
         <Link
-          href="/campaigns"
+          href="/campagins"
           className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800"
         >
           <Mail size={18}/>
